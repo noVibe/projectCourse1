@@ -7,13 +7,13 @@ class EmployeeBook {
     public EmployeeBook() {
     }
 
-    public void salarySum(int department) { // Сумма ЗП: выводит результат работы метода salarySumming //+
+    public void sumSalary(int department) { // Сумма ЗП: выводит результат работы метода salarySumming //+
         checkDepartment(department);
         String lineFiler = department == 0 ? "all employees" : department + " department";
-        System.out.printf("Salary sum of %s is: %s\n", lineFiler, salarySumming(department));
+        System.out.printf("Salary sum of %s is: %s\n", lineFiler, summingSalary(department));
     }
 
-    public void averageSum(int department) { //Средняя ЗП //+
+    public void findAverageSalary(int department) { //Средняя ЗП //+
         checkDepartment(department);
         int peoplesAmount = 0;
         for (int i = 0; i < theBook.size(); i++) {
@@ -22,10 +22,10 @@ class EmployeeBook {
             }
         }
         String lineFiller = department == 0 ? "all employees" : department + " department";
-        System.out.printf("Average sum of %s is %.2f\n", lineFiller, salarySumming(department) / peoplesAmount);
+        System.out.printf("Average salary of %s is %.2f\n", lineFiller, summingSalary(department) / peoplesAmount);
     }
 
-    public void smallestSalary(int department) { // Min ЗП 1-5 конкретный департамент, 0 - всe // +
+    public void findSmallestSalary(int department) { // Min ЗП 1-5 конкретный департамент, 0 - всe // +
         checkDepartment(department);
         double minimal = theBook.get(0).getSalary();
         for (int i = 0; i < theBook.size(); i++) {
@@ -38,7 +38,7 @@ class EmployeeBook {
         System.out.println(minimal);
     }
 
-    public void biggestSalary(int department) { // Max ЗП 1-5 конкретный департамент, 0 - всe // +
+    public void findBiggestSalary(int department) { // Max ЗП 1-5 конкретный департамент, 0 - всe // +
         checkDepartment(department);
         double max = theBook.get(0).getSalary();
         for (int i = 0; i < theBook.size(); i++) {
@@ -51,7 +51,7 @@ class EmployeeBook {
         System.out.println(max);
     }
 
-    public void employeesDataList(int department) { // Список данных сотрудников (всех или отдела) // +
+    public void printmployeesDataList(int department) { // Список данных сотрудников (всех или отдела) // +
         checkDepartment(department);
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -61,7 +61,7 @@ class EmployeeBook {
         }
     }
 
-    public void employeesNamesList(int department) { // Вывод имен сотрудников (всех или отдела) // +
+    public void printEmployeesNamesList(int department) { // Вывод имен сотрудников (всех или отдела) // +
         checkDepartment(department);
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -70,7 +70,7 @@ class EmployeeBook {
         }
     }
 
-    public void salaryIndexation(int department, double percent) { // Индексация ЗП (всех или отдела) // +
+    public void indexingSalary(int department, double percent) { // Индексация ЗП (всех или отдела) // +
         checkDepartment(department);
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -80,7 +80,7 @@ class EmployeeBook {
         System.out.println("Indexation completed");
     }
 
-    public void salaryBelow(double salaryBorder) { // Выводит всех, у кого ЗП меньше границы // +
+    public void printListWithSalaryBelow(double salaryBorder) { // Выводит всех, у кого ЗП меньше границы // +
         checkNegative(salaryBorder);
         for (int i = 0, switcher = 1; i < theBook.size(); i++) {
             if (theBook.get(i).getSalary() < salaryBorder) {
@@ -92,7 +92,7 @@ class EmployeeBook {
         }
     }
 
-    public void salaryAbove(double salaryBorder) { // Выводит всех, у кого ЗП выше границы // +
+    public void getListWithSalaryAbove(double salaryBorder) { // Выводит всех, у кого ЗП выше границы // +
         checkNegative(salaryBorder);
         for (int i = 0, switcher = 1; i < theBook.size(); i++) {
             if (theBook.get(i).getSalary() >= salaryBorder) {
@@ -105,7 +105,7 @@ class EmployeeBook {
     }
 
     public void addNewEmployee(String name, double salary, int department) { // Добавляет сотрудника // +
-        nameCheck(name);
+        checkName(name);
         checkNegative(salary);
         checkDepartment(department);
         Employee newEmployee = new Employee(name, salary, department, id);
@@ -133,8 +133,8 @@ class EmployeeBook {
         System.out.println("Employee has been deleted");
     }
 
-    public void salaryChanger(String name, double newSalary) { // Меняет ЗП по имени // +
-        nameCheck(name);
+    public void changeSalary(String name, double newSalary) { // Меняет ЗП по имени // +
+        checkName(name);
         checkNegative(newSalary);
         for (int i = 0; i < theBook.size(); i++) {
             if (name.equals(theBook.get(i).getName())) {
@@ -144,8 +144,8 @@ class EmployeeBook {
         System.out.printf("New salary for %s has been set: %s\n", name, newSalary);
     }
 
-    public void departmentChanger(String name, int newDepartment) { // Меняет отдел по имени // +
-        nameCheck(name);
+    public void changeDepartment(String name, int newDepartment) { // Меняет отдел по имени // +
+        checkName(name);
         checkDepartment(newDepartment);
         for (int i = 0; i < theBook.size(); i++) {
             if (name.equals(theBook.get(i).getName())) {
@@ -155,7 +155,7 @@ class EmployeeBook {
         System.out.printf("New department for %s is now %s\n", name, newDepartment);
     }
 
-    private double salarySumming(int department) { // считает сумму ЗП (всех или отдела) // +
+    private double summingSalary(int department) { // считает сумму ЗП (всех или отдела) // +
         checkDepartment(department);
         double salarySumCurrent = 0;
         for (int i = 0; i < theBook.size(); i++) {
@@ -181,7 +181,7 @@ class EmployeeBook {
             throw new IllegalArgumentException("Negative value! salary and id must always be positive");
         }
     }
-    private void nameCheck(String name) { // Проверяет ФИО на соответствие формату
+    private void checkName(String name) { // Проверяет ФИО на соответствие формату
         if (!name.matches("[А-Я][а-я]+(-?[А-Я][а-я]+)*\\s[А-Я][а-я]+\\s[А-Я][а-я]+")) {
             throw new IllegalArgumentException("Wrong name! Use russian keys with format: Фамилия Имя Отчество");
         }
