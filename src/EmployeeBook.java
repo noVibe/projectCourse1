@@ -60,7 +60,8 @@ class EmployeeBook {
         System.out.println(department == 0 ? "All employees data:" : department + " department employees data:");
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
-                System.out.printf("  id: %s,  %s, salary: %s\n", theBook.get(i).getId(), theBook.get(i).getName(), moneyFormat.format(theBook.get(i).getSalary()));
+                String filler = department != 0 ? "" : " department: " + theBook.get(i).getDepartment() + ",";
+                System.out.printf("  id: %s,%s %s, salary: %s\n", theBook.get(i).getId(), filler, theBook.get(i).getName(), moneyFormat.format(theBook.get(i).getSalary()));
             }
         }
     }
