@@ -27,5 +27,6 @@ public class Main {
         eBook.sumSalary(1);
         eBook.changeSalary("Галифианакис Зак Гарриевич", 250000);
         eBook.printEmployeesDataList(0);
+        eBook.modifyDepartments(3);
     }
 }

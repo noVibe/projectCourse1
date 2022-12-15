@@ -173,6 +173,20 @@ class EmployeeBook {
         searchFail("name");
     }
 
+    public void modifyDepartments(int newDepartmentsAmount) {
+        checkNegative(newDepartmentsAmount);
+        if (newDepartmentsAmount < departmentsAmount) {
+            for (Employee employee : theBook) {
+                if (employee.getDepartment() > newDepartmentsAmount) {
+                    throw new IllegalArgumentException("Departments being reduced are not empty! Before changing departments amount to "
+                            + newDepartmentsAmount + " remove employees from departments " + (newDepartmentsAmount + 1) + "..." + (departmentsAmount));
+                }
+            }
+        }
+        departmentsAmount = newDepartmentsAmount;
+        System.out.println("New amount of departments is: " + departmentsAmount);
+    }
+
     private double summingSalary(int department) { // считает сумму ЗП (всех или отдела)
         checkDepartment(department, 0);
         double salarySumCurrent = 0;
@@ -184,12 +198,12 @@ class EmployeeBook {
         return salarySumCurrent;
     }
 
-        /////// Блок проверки данных
+    /////// Блок проверки данных
     private void checkDepartment(int department, int minDepartmentValue) { // Проверяет значение департамента и не позволяет установить его ниже допустимого
         checkNegative(department);
         if (department > departmentsAmount) {
             throw new IllegalArgumentException("Department cant be bigger than " + departmentsAmount);
-        } else if (department <  minDepartmentValue) {
+        } else if (department < minDepartmentValue) {
             throw new IllegalArgumentException("Department cant be smaller than " + minDepartmentValue + ". Employee can't have department 0");
         }
     }
