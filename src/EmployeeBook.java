@@ -31,12 +31,11 @@ class EmployeeBook {
 
     public void findSmallestSalary(int department) { // Ищет самую низкую ЗП (среди всех или отдела)
         checkDepartment(department, 0);
-        double minimal = theBook.get(0).getSalary();
+        double minimal = -1;
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
-                if (minimal > theBook.get(i).getSalary()) {
+                if (minimal > theBook.get(i).getSalary() || minimal == -1)
                     minimal = theBook.get(i).getSalary();
-                }
             }
         }
         String filler = department == 0 ? "overall" : "in department " + department;
@@ -45,7 +44,7 @@ class EmployeeBook {
 
     public void findBiggestSalary(int department) { // Ищет самую большую ЗП (среди всех или отдела)
         checkDepartment(department, 0);
-        double max = theBook.get(0).getSalary();
+        double max = -1;
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
                 if (max < theBook.get(i).getSalary()) {
