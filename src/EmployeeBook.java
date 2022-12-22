@@ -4,19 +4,21 @@ import java.util.ArrayList;
 class EmployeeBook {
     private ArrayList<Employee> theBook = new ArrayList<>(); // Массив сотрудников
     private int id = 0; // Счетчик id
+    private int departmentsAmount; // количество департаментов
     private DecimalFormat moneyFormat = new DecimalFormat("###,###.##"); // Определение формата для денег
 
-    public EmployeeBook() {
+    public EmployeeBook(int departmentsAmount) {
+        this.departmentsAmount = departmentsAmount;
     }
 
     public void sumSalary(int department) { // Сумма ЗП: выводит результат работы метода summingSalary (среди всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         String filler = department == 0 ? "all employees" : department + " department";
         System.out.printf("Salary sum of %s is: %s\n", filler, moneyFormat.format(summingSalary(department)));
     }
 
     public void findAverageSalary(int department) { // Средняя ЗП (среди всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         int peoplesAmount = 0;
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -28,7 +30,7 @@ class EmployeeBook {
     }
 
     public void findSmallestSalary(int department) { // Ищет самую низкую ЗП (среди всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         double minimal = theBook.get(0).getSalary();
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -42,7 +44,7 @@ class EmployeeBook {
     }
 
     public void findBiggestSalary(int department) { // Ищет самую большую ЗП (среди всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         double max = theBook.get(0).getSalary();
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -56,7 +58,7 @@ class EmployeeBook {
     }
 
     public void printEmployeesDataList(int department) { // Список данных сотрудников (всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         System.out.println(department == 0 ? "All employees data:" : department + " department employees data:");
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -67,7 +69,7 @@ class EmployeeBook {
     }
 
     public void printEmployeesNamesList(int department) { // Вывод имен сотрудников (всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         System.out.println(department == 0 ? "All employees names list:" : department + " department employees names list:");
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -77,7 +79,7 @@ class EmployeeBook {
     }
 
     public void indexingSalary(int department, double percent) { // Индексация ЗП (всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
                 theBook.get(i).setSalary(theBook.get(i).getSalary() + theBook.get(i).getSalary() * percent / 100);
@@ -116,7 +118,7 @@ class EmployeeBook {
     public void addNewEmployee(String name, double salary, int department) { // Добавляет сотрудника
         checkName(name);
         checkNegative(salary);
-        checkDepartment(department);
+        checkDepartment(department, 1);
         Employee newEmployee = new Employee(name, salary, department, id);
         theBook.add(newEmployee);
         System.out.printf("The new employee %s was added\n", name);
@@ -161,7 +163,7 @@ class EmployeeBook {
 
     public void changeDepartment(String name, int newDepartment) { // Меняет отдел по имени
         checkName(name);
-        checkDepartment(newDepartment);
+        checkDepartment(newDepartment, 1);
         for (int i = 0; i < theBook.size(); i++) {
             if (name.equals(theBook.get(i).getName())) {
                 theBook.get(i).setDepartment(newDepartment);
@@ -171,8 +173,22 @@ class EmployeeBook {
         searchFail("name");
     }
 
+    public void modifyDepartments(int newDepartmentsAmount) {
+        checkNegative(newDepartmentsAmount);
+        if (newDepartmentsAmount < departmentsAmount) {
+            for (Employee employee : theBook) {
+                if (employee.getDepartment() > newDepartmentsAmount) {
+                    throw new IllegalArgumentException("Departments being reduced are not empty! Before changing departments amount to "
+                            + newDepartmentsAmount + " remove employees from departments " + (newDepartmentsAmount + 1) + "..." + (departmentsAmount));
+                }
+            }
+        }
+        departmentsAmount = newDepartmentsAmount;
+        System.out.println("New amount of departments is: " + departmentsAmount);
+    }
+
     private double summingSalary(int department) { // считает сумму ЗП (всех или отдела)
-        checkDepartment(department);
+        checkDepartment(department, 0);
         double salarySumCurrent = 0;
         for (int i = 0; i < theBook.size(); i++) {
             if (theBook.get(i).getDepartment() == department || department == 0) {
@@ -183,19 +199,18 @@ class EmployeeBook {
     }
 
     /////// Блок проверки данных
-    private void checkDepartment(int department) { // Проверяет значение департамента и не позволяет иметь сотруднику департамент 0
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        if ((stackTrace[2].getMethodName().equals("addNewEmployee") || stackTrace[2].getMethodName().equals("changeDepartment")) && (department > 5 || department <= 0)) {
-            throw new IllegalArgumentException("Department must be from 1 to 5! Employee can't get department " + department);
-        }
-        if (department > 5 || department < 0) {
-            throw new IllegalArgumentException("Department must be from 1 to 5! can't operate with department value " + department + ". Use 1-5 for employee operations or 0 for general operations");
+    private void checkDepartment(int department, int minDepartmentValue) { // Проверяет значение департамента и не позволяет установить его ниже допустимого
+        checkNegative(department);
+        if (department > departmentsAmount) {
+            throw new IllegalArgumentException("Department cant be bigger than " + departmentsAmount);
+        } else if (department < minDepartmentValue) {
+            throw new IllegalArgumentException("Department cant be smaller than " + minDepartmentValue + ". Employee can't have department 0");
         }
     }
 
-    private void checkNegative(double value) { // Проверяет значения для полей, которые должны быть больше нуля
-        if (value <= 0) {
-            throw new IllegalArgumentException("Negative value! salary and id must always be positive");
+    private void checkNegative(double value) { // Проверяет значения для полей, которые должны быть положительными
+        if (value < 0) {
+            throw new IllegalArgumentException("Negative value! Salary, department and id must be positive");
         }
     }
 
@@ -205,8 +220,8 @@ class EmployeeBook {
         }
     }
 
-    private void searchFail(String filler) { // Сообщение об ошибке при остутствии записи в БД
-        throw new IllegalArgumentException("This employee does not exist! Make sure that " + filler + " is correct!");
+    private void searchFail(String argument) { // Сообщение об ошибке при остутствии записи в БД
+        throw new IllegalArgumentException("This employee does not exist! Make sure that " + argument + " is correct!");
     }
 
 }
