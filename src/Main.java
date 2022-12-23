@@ -10,7 +10,7 @@ public class Main {
         eBook.addNewEmployee("Галифианакис Зак Гарриевич", 200000, 2);
         eBook.addNewEmployee("Сагиев Борат Александрович", 15, 2);
 
-        eBook.findSmallestSalary(4);
+        eBook.findSmallestSalary(5);
 
 
     }

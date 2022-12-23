@@ -38,6 +38,10 @@ class EmployeeBook {
                     minimal = theBook.get(i).getSalary();
             }
         }
+        if (minimal == -1) {
+            System.out.printf("Department %s is empty, smallest salary can't be found there.\n", department);
+            return;
+        }
         String filler = department == 0 ? "overall" : "in department " + department;
         System.out.printf("The smallest salary %s is: %s\n", filler, moneyFormat.format(minimal));
     }
@@ -51,6 +55,10 @@ class EmployeeBook {
                     max = theBook.get(i).getSalary();
                 }
             }
+        }
+        if (max == -1) {
+            System.out.printf("Department %s is empty, biggest salary can't be found there.\n", department);
+            return;
         }
         String filler = department == 0 ? "overall" : "in department " + department;
         System.out.printf("The biggest salary %s is: %s\n", filler, moneyFormat.format(max));
